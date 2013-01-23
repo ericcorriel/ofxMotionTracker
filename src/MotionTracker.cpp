@@ -21,9 +21,9 @@ MotionTracker::~MotionTracker(){
 	}
 }
 
-void MotionTracker::init(int w, int h, int i){
-	FrameDifferencer::init(w, h, i);
-	
+void MotionTracker::init(int w, int h, int i, string videoFileName){
+	FrameDifferencer::init(w, h, i, videoFileName);
+	cout << "VieoFileName: " << videoFileName << endl;
 	colorCurDiff.allocate(camWidth, camHeight);
 	colorPrev.allocate(camWidth, camHeight);
 	greyCurDiff.allocate(camWidth, camHeight);

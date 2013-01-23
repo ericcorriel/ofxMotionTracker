@@ -43,6 +43,7 @@ public:
 class FrameDifferencer{
 protected:
 	ofVideoGrabber			vidGrabber;
+    ofVideoPlayer           videoPlayer;
 	ofxCvColorImage			colorBg;
 	ofxCvColorImage			colorBgCalibrated;
 	ofxCvColorImage			colorNow;
@@ -88,6 +89,8 @@ protected:
 	bool isCalibrationPointHovered(int pointIdx, int x, int y);
 	
 	bool shouldRecaptureBackground(int cTime=-1);
+    
+    bool useVideoFile  =    false;
 	
 public:
 	bool					bHasNewFrame;
@@ -97,7 +100,8 @@ public:
 	FrameDifferencer();
 	~FrameDifferencer();
 	
-	virtual void init(int w=DEFAULT_CAMERA_WIDTH, int h=DEFAULT_CAMERA_HEIGHT, int i=DEFAULT_CAMERA_ID);
+	virtual void init(int w=DEFAULT_CAMERA_WIDTH, int h=DEFAULT_CAMERA_HEIGHT, int i=DEFAULT_CAMERA_ID, string videoFileName="");
+    
 	virtual void update();
 	virtual void reset();
 	bool hasNewFrame() { return bHasNewFrame; }

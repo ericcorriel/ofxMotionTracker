@@ -38,7 +38,7 @@ public:
 	MotionTracker();
 	~MotionTracker();
 	
-	virtual void init(int w=DEFAULT_CAMERA_WIDTH, int h=DEFAULT_CAMERA_HEIGHT, int i=DEFAULT_CAMERA_ID);
+	virtual void init(int w=DEFAULT_CAMERA_WIDTH, int h=DEFAULT_CAMERA_HEIGHT, int i=DEFAULT_CAMERA_ID, string videoFileName="");
 	virtual void reset();
 	
 	virtual void update();

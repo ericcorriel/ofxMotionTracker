@@ -65,7 +65,7 @@ protected:
 public:
 	MotionTrigger();
 	~MotionTrigger();
-	virtual void init(int cameraWidth=DEFAULT_CAMERA_WIDTH, int cameraHeight=DEFAULT_CAMERA_HEIGHT, int cameraID=DEFAULT_CAMERA_ID);
+	virtual void init(int cameraWidth=DEFAULT_CAMERA_WIDTH, int cameraHeight=DEFAULT_CAMERA_HEIGHT, int cameraID=DEFAULT_CAMERA_ID, string videoFileName="");
 	
 	bool isFiring();
 	

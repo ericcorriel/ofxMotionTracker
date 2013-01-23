@@ -17,8 +17,8 @@ MotionTrigger::~MotionTrigger(){
 		delete (*it);
 }
 
-void MotionTrigger::init(int cameraWidth, int cameraHeight, int cameraID){
-	MotionTracker::init(cameraWidth, cameraHeight, cameraID);
+void MotionTrigger::init(int cameraWidth, int cameraHeight, int cameraID, string videoFileName){
+	MotionTracker::init(cameraWidth, cameraHeight, cameraID, videoFileName);
 	this->setMirrorVideo(true);
 	this->triggerDelay = 0;
 	this->fireTime = -1;

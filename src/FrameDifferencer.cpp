@@ -20,10 +20,12 @@ FrameDifferencer::~FrameDifferencer(){
 }
 
 
-void FrameDifferencer::init(int w, int h, int i){
+void FrameDifferencer::init(int w, int h, int i, string videoFileName){
 	camWidth = w;
 	camHeight = h;
 	index = i;
+    videoFileName   =   videoFileName;
+    if(videoFileName!="") useVideoFile  =   true;
 	posX = index * camWidth;
 	posY = 0;
 	
@@ -34,9 +36,15 @@ void FrameDifferencer::init(int w, int h, int i){
 	
 	calibrationXMLFilename = DEFAULT_CALIBRATION_XML;
 	
-	vidGrabber.setDeviceID(i); // must set camera ID and other options before calling initGrabber
-	vidGrabber.initGrabber(camWidth, camHeight, false); // no texture
-	frameCount = 0;
+
+    if(useVideoFile){
+        videoPlayer.loadMovie(videoFileName);
+        videoPlayer.play();
+    }else {
+        vidGrabber.setDeviceID(i); // must set camera ID and other options before calling initGrabber
+        vidGrabber.initGrabber(camWidth, camHeight, false); // no texture
+	}
+        frameCount = 0;
 	
 	this->differenceMode = DEFAULT_DIFFERENCE_MODE;
 	this->autoBackgroundDelay = -1;
@@ -85,6 +93,7 @@ void FrameDifferencer::init(int w, int h, int i){
 	
 	reset();
 }
+
 
 bool FrameDifferencer::loadCalibrationSettings(string calibrationXML){
 	if(calibrationXML == "")
@@ -321,10 +330,18 @@ void FrameDifferencer::reset() {
 //--------------------------------------------------------------
 void FrameDifferencer::update(){
 	//	printf("starting MotionTracker %i update \n", index);
-	vidGrabber.grabFrame();
-	
-	if(bHasNewFrame = vidGrabber.isFrameNew()){
-		colorNow.setFromPixels(vidGrabber.getPixels(), camWidth,camHeight);
+	if(useVideoFile)    {
+        videoPlayer.update();
+        bHasNewFrame    =   videoPlayer.isFrameNew();
+    }
+    else{
+        vidGrabber.grabFrame();
+        bHasNewFrame    =   vidGrabber.isFrameNew();
+    }
+	if(bHasNewFrame){
+        if(useVideoFile)    colorNow.setFromPixels(videoPlayer.getPixels(), camWidth, camHeight);
+        else                colorNow.setFromPixels(vidGrabber.getPixels(), camWidth,camHeight);
+        
 		colorNow.mirror(mirrorVideoVertical, mirrorVideoHorizontal);
 		
 		if(distortionEnabled){
@@ -497,7 +514,8 @@ int FrameDifferencer::getCamThreshold(){
 }
 
 unsigned char* FrameDifferencer::getColorPixels(){
-	return this->vidGrabber.getPixels();
+	if(useVideoFile) return this->videoPlayer.getPixels();
+    else             return this->vidGrabber.getPixels();
 }
 
 unsigned char* FrameDifferencer::getBGDiffPixels(){
